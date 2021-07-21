@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://code.jquery.com/jquery-1.7.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script>
+      function display(data){
+        //-----------------------------
+        Highcharts.chart('container', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '연도별 지역별 병원 인허가수'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: data.catg,
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'number'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.f} 건</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: '2016',
+                data: data.d16
+            }, {
+                name: '2017',
+                data: data.d17
+            }, {
+                name: '2018',
+                data: data.d18
+            }, {
+                name: '2019',
+                data: data.d19
+            }, {
+                name: '2020',
+                data: data.d20
+            }, {
+                name: '2021',
+                data: data.d21
+            }]
+        });
+        //-----------------------------
+      };
+
+      function getdata(){
+        $.ajax({
+            url:'hospitals',
+            datatype:'JSON',
+            success:function(data){
+                display(data);
+            }
+        });
+      };
+      $(document).ready(function(){
+            getdata();
+      });
+    </script>
+</head>
+<body>
+  <h1>Hospital</h1>
+  <div id="container"></div>
+</body>
+</html>

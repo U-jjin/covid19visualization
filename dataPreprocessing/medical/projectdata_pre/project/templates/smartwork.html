@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://code.jquery.com/jquery-1.7.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script>
+      function display(data){
+        //-----------------------------
+            Highcharts.chart('container', {
+
+            title: {
+                text: 'Experience using remote work , 2017-2020'
+            },
+
+            subtitle: {
+                text: 'Source: kostat.go.kr'
+            },
+
+            yAxis: {
+                title: {
+                    text: 'Percentage'
+                }
+            },
+
+            xAxis: {
+                title: {
+                    text: 'Year'
+                },
+                accessibility: {
+                    rangeDescription: 'Range: 2017 to 2020'
+                }
+            },
+
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: 2017
+                }
+            },
+
+            series: [{
+                name: '재택근무_중앙행정기관',
+                data: data.e1
+            }, {
+                name: '원격회의_중앙행정기관',
+                data: data.e2
+            }, {
+                name: '재택근무_광역자치단체',
+                data: data.e3
+            }, {
+                name: '원격회의_광역자치단체',
+                data: data.e4
+            }],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+
+});
+        //-----------------------------
+      };
+
+      function getdata(){
+        $.ajax({
+            url:'smartworks',
+            datatype:'JSON',
+            success:function(data){
+                display(data);
+            }
+        });
+      };
+      $(document).ready(function(){
+            getdata();
+      });
+    </script>
+</head>
+<body>
+  <h1>Smartwork</h1>
+  <div id="container"></div>
+</body>
+</html>

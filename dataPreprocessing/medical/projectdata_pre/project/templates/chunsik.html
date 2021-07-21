@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://code.jquery.com/jquery-1.7.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script>
+      function display(data){
+        //-----------------------------
+            Highcharts.chart('container', {
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: '진료정보_천식'
+                },
+                subtitle: {
+                    text: 'Source: data.go.kr'
+                },
+                xAxis: {
+                    categories: data.catg
+                },
+                yAxis: {
+                    title: {
+                        text: '발생건수'
+                    },
+                },
+                plotOptions: {
+                    line: {
+                        dataLabels: {
+                            enabled: false
+                        },
+                        enableMouseTracking: true
+                    }
+                },
+                series: [{
+                    name: '전국',
+                    data: data.d1
+                }]
+            });
+        //-----------------------------
+      };
+
+      function getdata(){
+        $.ajax({
+            url:'chunsiks',
+            datatype:'JSON',
+            success:function(data){
+                display(data);
+            }
+        });
+      };
+      $(document).ready(function(){
+            getdata();
+      });
+    </script>
+</head>
+<body>
+  <h1>Chunsik</h1>
+  <div id="container"></div>
+</body>
+</html>
