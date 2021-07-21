@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="http://code.jquery.com/jquery-1.7.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script>
+          function display3(data){
+        //-----------------------------
+            Highcharts.chart('newgamgi', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: '연.월별 감기 진료정보'
+                },
+                subtitle: {
+                    text: 'Source: data.go.kr'
+                },
+                xAxis: {
+                    categories: [
+                        'Jan',
+                        'Feb',
+                        'Mar',
+                        'Apr',
+                        'May',
+                        'Jun',
+                        'Jul',
+                        'Aug',
+                        'Sep',
+                        'Oct',
+                        'Nov',
+                        'Dec'
+                    ],
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'cases'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.f} 건</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [{
+                    name: '2014',
+                    data: data.d14
+                }, {
+                    name: '2015',
+                    data: data.d15
+                }, {
+                    name: '2016',
+                    data: data.d16
+                }, {
+                    name: '2017',
+                    data: data.d17
+                }, {
+                    name: '2018',
+                    data: data.d18
+                }, {
+                    name: '2019',
+                    data: data.d19
+                }, {
+                    name: '2020',
+                    data: data.d20
+                }]
+            });
+        //-----------------------------
+      };
+
+      function getdata3(){
+        $.ajax({
+            url:'gamgi_news',
+            datatype:'JSON',
+            success:function(data){
+                display3(data);
+            }
+        });
+      };
+
+
+          function display2(data){
+        //-----------------------------
+            Highcharts.chart('chunsik', {
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: '진료정보_천식'
+                },
+                subtitle: {
+                    text: 'Source: data.go.kr'
+                },
+                xAxis: {
+                    categories: data.catg
+                },
+                yAxis: {
+                    title: {
+                        text: '발생건수'
+                    },
+                },
+                plotOptions: {
+                    line: {
+                        dataLabels: {
+                            enabled: false
+                        },
+                        enableMouseTracking: true
+                    }
+                },
+                series: [{
+                    name: '전국',
+                    data: data.d1
+                }]
+            });
+        //-----------------------------
+      };
+      function getdata2(){
+        $.ajax({
+            url:'chunsiks',
+            datatype:'JSON',
+            success:function(data){
+                display2(data);
+            }
+        });
+      };
+
+      function display(data){
+        //-----------------------------
+            Highcharts.chart('gamgi', {
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: '진료정보_감기'
+                },
+                subtitle: {
+                    text: 'Source: data.go.kr'
+                },
+                xAxis: {
+                    categories: data.catg
+                },
+                yAxis: {
+                    title: {
+                        text: '발생건수'
+                    }
+                },
+                plotOptions: {
+                    line: {
+                        dataLabels: {
+                            enabled: false
+                        },
+                        enableMouseTracking: true
+                    }
+                },
+
+                series: [{
+                    name: '전국',
+                    data: data.d1
+                }]
+            });
+        //-----------------------------
+      };
+
+      function getdata1(){
+        $.ajax({
+            url:'gamgis',
+            datatype:'JSON',
+            success:function(data){
+                display(data);
+            }
+        });
+      };
+
+      $(document).ready(function(){
+            getdata1();
+            getdata2();
+            getdata3();
+      });
+    </script>
+</head>
+<body>
+          <div class="row">
+            <div class="col-xl-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        감기 line chart
+                    </div>
+                    <div class="card-body">
+                        <div id="gamgi" width="100%" height="40"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-chart-bar me-1"></i>
+                        천식 line chart
+                    </div>
+                    <div class="card-body"><div id="chunsik" width="100%" height="40"></div></div>
+                </div>
+            </div>
+        </div>
+          <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-chart-area me-1"></i>
+                        지역별 연별 Bar Chart
+                    </div>
+                    <div class="card-body"><div id="newgamgi" width="100%" height="30"></div></div>
+        </div>
+  <div id="container"></div>
+</body>
+</html>
